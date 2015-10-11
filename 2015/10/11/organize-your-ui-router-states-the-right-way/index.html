@@ -1,0 +1,424 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="JavaScript Monkey">
+    <title>Organize your UI Router states The Right Way™ - JavaScript Monkey</title>
+    <meta name="author" content="Jean Dupouy">
+    
+    
+        <link rel="alternative" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <meta name="description" content="In this article, we review the traditional approach to UI Router states organization, and an opiniated alternative using AngularJS constants.">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="Organize your UI Router states The Right Way™">
+<meta property="og:url" content="https://izeau.github.io/2015/10/11/organize-your-ui-router-states-the-right-way/index.html">
+<meta property="og:site_name" content="JavaScript Monkey">
+<meta property="og:description" content="In this article, we review the traditional approach to UI Router states organization, and an opiniated alternative using AngularJS constants.">
+<meta property="og:updated_time" content="2015-10-11T18:36:06.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Organize your UI Router states The Right Way™">
+<meta name="twitter:description" content="In this article, we review the traditional approach to UI Router states organization, and an opiniated alternative using AngularJS constants.">
+<meta name="twitter:creator" content="@izeau">
+    
+    
+    
+        <meta property="og:image" content="http://www.gravatar.com/avatar/293d986fd9cd0144afeab81e0e29c9af?s=640"/>
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style.min.css" type="text/css">
+    <!--STYLES END-->
+    
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-68688028-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+</head>
+
+    <body>
+        <div id="blog">
+            <header id="header" data-behavior="3">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <h1 class="header-title">
+        <a class="header-title-link" href="/ ">JavaScript Monkey</a>
+    </h1>
+    
+        <a class="header-right-picture" href="/#about">
+            <img class="header-picture" src="http://www.gravatar.com/avatar/293d986fd9cd0144afeab81e0e29c9af?s=90"/>
+        </a>
+    
+</header>
+            <nav id="sidebar" data-behavior="3">
+    
+        <div class="sidebar-profile">
+            <a href="/#about">
+                
+                    <img class="sidebar-profile-picture" src="http://www.gravatar.com/avatar/293d986fd9cd0144afeab81e0e29c9af?s=90"/>
+                
+            </a>
+            <span class="sidebar-profile-name">Jean Dupouy</span>
+        </div>
+    
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/ "
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+                    <span class="sidebar-button-desc">Home</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-categories"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+                    <span class="sidebar-button-desc">Categories</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-tags"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+                    <span class="sidebar-button-desc">Tags</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-archives"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+                    <span class="sidebar-button-desc">Archive</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link " href="https://github.com/izeau" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+                    <span class="sidebar-button-desc">GitHub</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link " href="https://twitter.com/izeau" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-twitter"></i>
+                    <span class="sidebar-button-desc">Twitter</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link " href="https://fr.linkedin.com/in/jeandupouy" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-linkedin"></i>
+                    <span class="sidebar-button-desc">Linked In</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/atom.xml"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+                    <span class="sidebar-button-desc">RSS</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+</nav>
+
+            
+            <div id="main" data-behavior="3"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope itemType="http://schema.org/BlogPosting">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title" itemprop="headline">
+            Organize your UI Router states The Right Way™
+        </h1>
+    
+    <div class="post-meta">
+    <time itemprop="datePublished" content="Sun Oct 11 2015 18:18:33 GMT+0200">
+	
+		    October 11th 2015
+    	
+    </time>
+    
+</div>
+</div>
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <p>In this article, we review the traditional approach to UI Router states organization, and an opiniated alternative using AngularJS constants.</p>
+<a id="more"></a>
+<h1 id="Hello,_UI_Router!">Hello, UI Router!</h1><p><a href="http://angular-ui.github.io/ui-router/" target="_blank" rel="external">UI Router</a> is a very well known AngularJS module. It is used by Ionic instead of <a href="https://docs.angularjs.org/api/ngRoute" target="_blank" rel="external">AngularJS’ router</a> by default, but you can (and should probably try to) use it for your Single-Page Applications.</p>
+<p>Instead of routing by URL, you organize your controllers by state. States can be nested and share local services known as “resolves”. By the way, states can have multiple views (e.g. your root state <code>app</code> would have a <code>menu</code> and a <code>content</code> view).</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">+-------------- app --------------+&#10;| +- menu -+  +---- content ----+ |&#10;| |        |  |                 | |&#10;| |        |  |                 | |&#10;| |        |  |                 | |&#10;| +--------+  +-----------------+ |&#10;+---------------------------------+</span><br></pre></td></tr></table></figure>
+<p>Traditionally, we would declare this state as such:</p>
+<figure class="highlight js"><figcaption><span>config/routes.js</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">angular</span><br><span class="line">  .module(<span class="string">'app.config'</span>)</span><br><span class="line">  .config(routes);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">routes</span> (<span class="params">$stateProvider</span>) </span>&#123;</span><br><span class="line">  $stateProvider</span><br><span class="line">    .state(<span class="string">'app'</span>, &#123;</span><br><span class="line">      url: <span class="string">'/'</span>,</span><br><span class="line">      templateUrl: <span class="string">'/templates/app.html'</span>,</span><br><span class="line">      controller: <span class="string">'AppController as app'</span>,</span><br><span class="line">      abstract: <span class="literal">true</span>,</span><br><span class="line">      resolve: &#123;</span><br><span class="line">        user: <span class="string">'CurrentUser'</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><figcaption><span>controllers/app/app.controller.js</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">angular</span><br><span class="line">  .module(<span class="string">'app.controllers'</span>)</span><br><span class="line">  .controller(<span class="string">'AppController'</span>, AppController);</span><br><span class="line"></span><br><span class="line"><span class="comment">// `user` is the resolved `CurrentUser` service</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">AppController</span> (<span class="params">user</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.user = user;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><figcaption><span>templates/app.html</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">div</span> <span class="attribute">class</span>=<span class="value">"app"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">aside</span> <span class="attribute">class</span>=<span class="value">"menu"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">div</span> <span class="attribute">class</span>=<span class="value">"menu--greetings"</span>&gt;</span></span><br><span class="line">      Hello, &#123;&#123; app.user.fullname &#125;&#125;!</span><br><span class="line">    <span class="tag">&lt;/<span class="title">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- a menu that's customisable by a child state --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">ui-view</span> <span class="attribute">name</span>=<span class="value">"menu"</span>&gt;</span><span class="tag">&lt;/<span class="title">ui-view</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="title">aside</span>&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">&lt;!-- main content --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">main</span></span><br><span class="line">    <span class="attribute">class</span>=<span class="value">"content"</span></span><br><span class="line">    <span class="attribute">ui-view</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="title">main</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>Note that we don’t name the <code>content</code> view intentionally. This is so that we can refer to it in child states without having to specify a view object:</p>
+<figure class="highlight js"><figcaption><span>config/routes.js</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">angular</span><br><span class="line">  .module(<span class="string">'app.config'</span>)</span><br><span class="line">  .config(routes);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">routes</span> (<span class="params">$stateProvider</span>) </span>&#123;</span><br><span class="line">  $stateProvider</span><br><span class="line">    .state(<span class="string">'app'</span>, &#123;</span><br><span class="line">      url: <span class="string">''</span>,</span><br><span class="line">      templateUrl: <span class="string">'/templates/app.html'</span>,</span><br><span class="line">      controller: <span class="string">'AppController as app'</span>,</span><br><span class="line">      abstract: <span class="literal">true</span>,</span><br><span class="line">      resolve: &#123;</span><br><span class="line">        user: <span class="string">'CurrentUser'</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">    .state(<span class="string">'app.profile'</span>, &#123;</span><br><span class="line">      url: <span class="string">'/profile'</span>,</span><br><span class="line"></span><br><span class="line">      <span class="comment">// since the content view is unnamed, we can do this:</span></span><br><span class="line">      templateUrl: <span class="string">'/templates/profile.html'</span>,</span><br><span class="line">      controller: <span class="string">'ProfileController as profile'</span></span><br><span class="line"></span><br><span class="line">      <span class="comment">// instead of this:</span></span><br><span class="line">      views: &#123;</span><br><span class="line">        content: &#123;</span><br><span class="line">          templateUrl: <span class="string">'/templates/profile.html'</span>,</span><br><span class="line">          controller: <span class="string">'ProfileController as profile'</span></span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="Feeling_bloated?">Feeling bloated?</h1><p>Of course, the more your application grows, the more your <code>routes</code> function grows. Moreover, by declaring states like this, we kind of ruin the modularization: we’re puttin’ somewhat-but-not-always related code in one place, and at the same time resolves are not easily visible in the middle of this mess.</p>
+<p>Instead of shoving my states in a config block, I’d rather have them sitting with their controller, and injected into the config function so that we can improve readibility:</p>
+<figure class="highlight js"><figcaption><span>config/routes.js</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">angular</span><br><span class="line">  .module(<span class="string">'app.config'</span>)</span><br><span class="line">  .config(routes);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">routes</span> (<span class="params">$stateProvider, AppState, ProfileState</span>) </span>&#123;</span><br><span class="line">  $stateProvider</span><br><span class="line">    .state(<span class="string">'app'</span>, AppState)</span><br><span class="line">    .state(<span class="string">'app.profile'</span>, ProfileState);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Turns out there’s only two types of AngularJS objects that are injectable to a config block: service providers and constants. Guess how we’re going to declare our states?</p>
+<figure class="highlight js"><figcaption><span>states/app/app.state.js</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">angular</span><br><span class="line">  .module(<span class="string">'app.states'</span>)</span><br><span class="line">  .controller(<span class="string">'AppController'</span>, AppController)</span><br><span class="line">  .constant(<span class="string">'AppState'</span>, &#123;</span><br><span class="line">    url: <span class="string">''</span>,</span><br><span class="line">    templateUrl: <span class="string">'/templates/app.html'</span>,</span><br><span class="line">    controller: <span class="string">'AppController as app'</span>,</span><br><span class="line">    abstract: <span class="literal">true</span>,</span><br><span class="line">    resolve: &#123;</span><br><span class="line">      user: <span class="string">'CurrentUser'</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">AppController</span> (<span class="params">user</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.user = user;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>This way, we can keep our state object right there with its controller and keep routing configuration in another file. It also allows us to see every declared state at a glance rather than having to <code>grep \.state config/routes.js</code>.</p>
+<h1 id="Sidenotes">Sidenotes</h1><h2 id="Using_$injector">Using <code>$injector</code></h2><p>AngularJS’ Dependency Injection system gets quite verbose, and nobody wants to maintain a 6+ arguments function. Luckily for us, the <a href="https://docs.angularjs.org/api/auto/service/$injector" target="_blank" rel="external"><code>$injector</code></a> service can be used to inject dependencies on the fly. So we can rewrite our config file:</p>
+<figure class="highlight js"><figcaption><span>config/routes.js</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">angular</span><br><span class="line">  .module(<span class="string">'app.config'</span>)</span><br><span class="line">  .config(routes);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">routes</span> (<span class="params">$stateProvider, $injector</span>) </span>&#123;</span><br><span class="line">  $stateProvider</span><br><span class="line">    .state(<span class="string">'app'</span>, $injector.get(<span class="string">'AppState'</span>))</span><br><span class="line">    .state(<span class="string">'app.profile'</span>, $injector.get(<span class="string">'ProfileState'</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+            
+                
+
+            
+        </div>
+    </div>
+    <div class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">TAGGED IN</span><br/>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/angularjs/">AngularJS</a> <a class="tag tag--primary tag--small t-link" href="/tags/ui-router/">UI Router</a>
+
+            </div>
+        
+        <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://izeau.github.io/2015/10/11/organize-your-ui-router-states-the-right-way/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://izeau.github.io/2015/10/11/organize-your-ui-router-states-the-right-way/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://izeau.github.io/2015/10/11/organize-your-ui-router-states-the-right-way/">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#top">
+                <i class="fa fa-angle-up"></i>
+            
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2015 Jean Dupouy. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="3">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://izeau.github.io/2015/10/11/organize-your-ui-router-states-the-right-way/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://izeau.github.io/2015/10/11/organize-your-ui-router-states-the-right-way/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://izeau.github.io/2015/10/11/organize-your-ui-router-states-the-right-way/">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#top">
+                <i class="fa fa-angle-up"></i>
+            
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="3">
+    <ul class="share-options">
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://izeau.github.io/2015/10/11/organize-your-ui-router-states-the-right-way/">
+                <i class="fa fa-google-plus"></i><span class="">Share on Google Plus</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://izeau.github.io/2015/10/11/organize-your-ui-router-states-the-right-way/">
+                <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://izeau.github.io/2015/10/11/organize-your-ui-router-states-the-right-way/">
+                <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+            </a>
+        </li>
+    </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+            
+        </div>
+        <div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <img id="about-card-picture" src="http://www.gravatar.com/avatar/293d986fd9cd0144afeab81e0e29c9af?s=110"/>
+        
+            <h4 id="about-card-name">Jean Dupouy</h4>
+        
+            <h5 id="about-card-bio"><p>Full-stack web developer / devops</p>
+</h5>
+        
+        
+            <h5 id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p><a href="https://www.rednet.io">rednet.io</a> co-founder</p>
+
+            </h5>
+        
+        
+            <h5 id="about-card-location">
+                <i class="fa fa-map-marker"></i>
+                <br/>
+                Paris, France
+            </h5>
+        
+    </div>
+</div>
+
+        <div id="cover" style="background-image:url('/assets/images/background.jpg');"></div>
+    </body>
+    <!--SCRIPTS-->
+<script src="/assets/js/script.min.js" type="text/javascript"></script>
+<!--SCRIPTS END-->
+
+
+
+</html>
