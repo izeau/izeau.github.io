@@ -1,0 +1,429 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="JavaScript Monkey">
+    <title>Elegantly dispose of your AngularJS listeners! - JavaScript Monkey</title>
+    <meta name="author" content="Jean Dupouy">
+    
+    
+        <link rel="alternative" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <meta name="description" content="If you have used AngularJS, you probably have at least once used the Scope.$on or Scope.$watch methods, and probably had to dispose of listeners / watchers. Here’s a little trick you may like to do ju">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="Elegantly dispose of your AngularJS listeners!">
+<meta property="og:url" content="https://izeau.github.io/2015/10/12/elegantly-dispose-of-your-angularjs-listeners/index.html">
+<meta property="og:site_name" content="JavaScript Monkey">
+<meta property="og:description" content="If you have used AngularJS, you probably have at least once used the Scope.$on or Scope.$watch methods, and probably had to dispose of listeners / watchers. Here’s a little trick you may like to do ju">
+<meta property="og:updated_time" content="2015-10-12T20:40:50.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Elegantly dispose of your AngularJS listeners!">
+<meta name="twitter:description" content="If you have used AngularJS, you probably have at least once used the Scope.$on or Scope.$watch methods, and probably had to dispose of listeners / watchers. Here’s a little trick you may like to do ju">
+<meta name="twitter:creator" content="@izeau">
+    
+    
+    
+        <meta property="og:image" content="http://www.gravatar.com/avatar/293d986fd9cd0144afeab81e0e29c9af?s=640"/>
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style.min.css" type="text/css">
+    <!--STYLES END-->
+    
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-68688028-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+</head>
+
+    <body>
+        <div id="blog">
+            <header id="header" data-behavior="3">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <h1 class="header-title">
+        <a class="header-title-link" href="/ ">JavaScript Monkey</a>
+    </h1>
+    
+        <a class="header-right-picture" href="/#about">
+            <img class="header-picture" src="http://www.gravatar.com/avatar/293d986fd9cd0144afeab81e0e29c9af?s=90"/>
+        </a>
+    
+</header>
+            <nav id="sidebar" data-behavior="3">
+    
+        <div class="sidebar-profile">
+            <a href="/#about">
+                
+                    <img class="sidebar-profile-picture" src="http://www.gravatar.com/avatar/293d986fd9cd0144afeab81e0e29c9af?s=90"/>
+                
+            </a>
+            <span class="sidebar-profile-name">Jean Dupouy</span>
+        </div>
+    
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/ "
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+                    <span class="sidebar-button-desc">Home</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-categories"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+                    <span class="sidebar-button-desc">Categories</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-tags"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+                    <span class="sidebar-button-desc">Tags</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-archives"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+                    <span class="sidebar-button-desc">Archive</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link " href="https://github.com/izeau" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+                    <span class="sidebar-button-desc">GitHub</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link " href="https://twitter.com/izeau" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-twitter"></i>
+                    <span class="sidebar-button-desc">Twitter</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link " href="https://fr.linkedin.com/in/jeandupouy" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-linkedin"></i>
+                    <span class="sidebar-button-desc">Linked In</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/atom.xml"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+                    <span class="sidebar-button-desc">RSS</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+</nav>
+
+            
+            <div id="main" data-behavior="3"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope itemType="http://schema.org/BlogPosting">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title" itemprop="headline">
+            Elegantly dispose of your AngularJS listeners!
+        </h1>
+    
+    <div class="post-meta">
+    <time itemprop="datePublished" content="Mon Oct 12 2015 21:25:47 GMT+0200">
+	
+		    October 12th 2015
+    	
+    </time>
+    
+</div>
+</div>
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <p>If you have used AngularJS, you probably have at least once used the <code>Scope.$on</code> or <code>Scope.$watch</code> methods, and probably had to dispose of listeners / watchers. Here’s a little trick you may like to do just that in a few lines.</p>
+<a id="more"></a>
+<h1 id="Deregistration_functions_are_awkward">Deregistration functions are awkward</h1><p>AngularJS’s <code>Scope.$on</code> and <code>Scope.$watch</code> methods return a deregistration function which should be called when you don’t need the callback anymore (e.g. if you were listening on <code>$rootScope</code> from a controller), mainly for performance reasons. Not disposing of listeners will keep the garbage collector from doing its job. For instance, if the <code>fooListener</code> below was to use a variable (say <code>counter</code>) from a higher context, it wouldn’t be freed from memory. This can lead to a large consumption of RAM, and is especially something to watch for in Single-Page Applications and mobile apps.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// These will only be freed when the $rootScope gets destroyed, likely</span></span><br><span class="line"><span class="comment">// when you close the tab / reload the page. They will keep piling up if</span></span><br><span class="line"><span class="comment">// your controller is created multiple times, and are a common cause of</span></span><br><span class="line"><span class="comment">// memory leaks.</span></span><br><span class="line"><span class="keyword">var</span> deregisterFooListener = $rootScope.$on(<span class="string">'myFooEvent'</span>, fooListener);</span><br><span class="line"><span class="keyword">var</span> deregisterBarListener = $rootScope.$on(<span class="string">'myBarEvent'</span>, barListener);</span><br><span class="line"><span class="keyword">var</span> deregisterBazListener = $rootScope.$on(<span class="string">'myBazEvent'</span>, bazListener);</span><br><span class="line"></span><br><span class="line"><span class="comment">// This one will be automatically freed when the $scope gets destroyed.</span></span><br><span class="line">$scope.$on(<span class="string">'$destroy'</span>, deregister);</span><br><span class="line"></span><br><span class="line"><span class="comment">// This variable would be leaking if we didn’t call the deregistration</span></span><br><span class="line"><span class="comment">// function because it is used in the fooListener.</span></span><br><span class="line"><span class="keyword">var</span> counter = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// A dummy listener for the example’s sake</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fooListener</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// Increment the counter</span></span><br><span class="line">  counter = counter + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">deregister</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// The scope’s about to be destroyed, we don’t need the listeners anymore.</span></span><br><span class="line">  deregisterFooListener();</span><br><span class="line">  deregisterBarListener();</span><br><span class="line">  deregisterBazListener();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="Use_an_array!">Use an array!</h1><p>This is OK when you only have one or two listeners to care for, but gets messier the more you have. My humble tip: use an array of deregistration functions which you can loop on and call one by one.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> listeners = [</span><br><span class="line">  $rootScope.$on(<span class="string">'myFooEvent'</span>, fooListener),</span><br><span class="line">  $rootScope.$on(<span class="string">'myBarEvent'</span>, barListener),</span><br><span class="line">  $rootScope.$on(<span class="string">'myBazEvent'</span>, bazListener)</span><br><span class="line">];</span><br><span class="line"></span><br><span class="line">$scope.$on(<span class="string">'$destroy'</span>, deregister);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">deregister</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">while</span> (listeners.length) &#123;</span><br><span class="line">    <span class="comment">// Mind the double parens! We pop one deregistration function at a time</span></span><br><span class="line">    <span class="comment">// and call it immediately.</span></span><br><span class="line">    listeners.pop()();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>That way you won’t pollute the local scope and you won’t have to come up with awkward variable names such as <code>deregisterStateChangeSuccessListener</code>.</p>
+<h1 id="Deregistration_as_a_Service">Deregistration as a Service</h1><p>You don’t want to repeat yourself and copy-paste this <code>deregister</code> function all around the codebase, do you? Enter the <code>deregister</code> service.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">angular</span><br><span class="line">  .module(<span class="string">'app.utils'</span>)</span><br><span class="line">  .value(<span class="string">'deregister'</span>, deregister);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">deregister</span> (<span class="params">listeners</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">deregisterCallback</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">// Feel free to loop however you want, I like this one for brevity</span></span><br><span class="line">    <span class="keyword">while</span> (listeners.length) &#123;</span><br><span class="line">      listeners.pop()();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>And then you can simply use it like this:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Inject the deregister service</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">MyController</span> (<span class="params">$scope, deregister</span>) </span>&#123;</span><br><span class="line">  $scope.$on(<span class="string">'$destroy'</span>, deregister([</span><br><span class="line">    $rootScope.$on(<span class="string">'myFooEvent'</span>, fooListener),</span><br><span class="line">    $rootScope.$on(<span class="string">'myBarEvent'</span>, barListener),</span><br><span class="line">    $rootScope.$on(<span class="string">'myBazEvent'</span>, bazListener)</span><br><span class="line">  ]));</span><br><span class="line"></span><br><span class="line">  <span class="comment">// or, if it’s more your style:</span></span><br><span class="line">  <span class="keyword">var</span> deregisterEverything = deregister([</span><br><span class="line">    $rootScope.$on(<span class="string">'myFooEvent'</span>, fooListener),</span><br><span class="line">    $rootScope.$on(<span class="string">'myBarEvent'</span>, barListener),</span><br><span class="line">    $rootScope.$on(<span class="string">'myBazEvent'</span>, bazListener)</span><br><span class="line">  ]);</span><br><span class="line"></span><br><span class="line">  $scope.$on(<span class="string">'$destroy'</span>, deregisterEverything);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Much cleaner, isn’t it?</p>
+
+            
+                
+
+            
+        </div>
+    </div>
+    <div class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">TAGGED IN</span><br/>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/angularjs/">AngularJS</a> <a class="tag tag--primary tag--small t-link" href="/tags/code-style/">Code Style</a>
+
+            </div>
+        
+        <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/10/11/organize-your-ui-router-states-the-right-way/" data-tooltip="Organize your UI Router states The Right Way™">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://izeau.github.io/2015/10/12/elegantly-dispose-of-your-angularjs-listeners/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://izeau.github.io/2015/10/12/elegantly-dispose-of-your-angularjs-listeners/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://izeau.github.io/2015/10/12/elegantly-dispose-of-your-angularjs-listeners/">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#top">
+                <i class="fa fa-angle-up"></i>
+            
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2015 Jean Dupouy. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="3">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/10/11/organize-your-ui-router-states-the-right-way/" data-tooltip="Organize your UI Router states The Right Way™">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://izeau.github.io/2015/10/12/elegantly-dispose-of-your-angularjs-listeners/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://izeau.github.io/2015/10/12/elegantly-dispose-of-your-angularjs-listeners/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://izeau.github.io/2015/10/12/elegantly-dispose-of-your-angularjs-listeners/">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#top">
+                <i class="fa fa-angle-up"></i>
+            
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="3">
+    <ul class="share-options">
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://izeau.github.io/2015/10/12/elegantly-dispose-of-your-angularjs-listeners/">
+                <i class="fa fa-google-plus"></i><span class="">Share on Google Plus</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://izeau.github.io/2015/10/12/elegantly-dispose-of-your-angularjs-listeners/">
+                <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://izeau.github.io/2015/10/12/elegantly-dispose-of-your-angularjs-listeners/">
+                <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+            </a>
+        </li>
+    </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+            
+        </div>
+        <div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <img id="about-card-picture" src="http://www.gravatar.com/avatar/293d986fd9cd0144afeab81e0e29c9af?s=110"/>
+        
+            <h4 id="about-card-name">Jean Dupouy</h4>
+        
+            <h5 id="about-card-bio"><p>Full-stack web developer / devops</p>
+</h5>
+        
+        
+            <h5 id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p><a href="https://www.rednet.io">rednet.io</a> co-founder</p>
+
+            </h5>
+        
+        
+            <h5 id="about-card-location">
+                <i class="fa fa-map-marker"></i>
+                <br/>
+                Paris, France
+            </h5>
+        
+    </div>
+</div>
+
+        <div id="cover" style="background-image:url('/assets/images/background.jpg');"></div>
+    </body>
+    <!--SCRIPTS-->
+<script src="/assets/js/script.min.js" type="text/javascript"></script>
+<!--SCRIPTS END-->
+
+
+
+</html>
