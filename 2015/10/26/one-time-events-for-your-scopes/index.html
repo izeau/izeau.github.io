@@ -1,0 +1,443 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="JavaScript Monkey">
+    <title>One-time events for your scopes! - JavaScript Monkey</title>
+    <meta name="author" content="Jean Dupouy">
+    
+    
+        <link rel="alternative" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <meta name="description" content="In the previous post, we created a simple service called deregister to make event listeners deregistration easier. But sometimes you don’t even need to listen to an event more than once, and then the">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="One-time events for your scopes!">
+<meta property="og:url" content="https://izeau.github.io/2015/10/26/one-time-events-for-your-scopes/index.html">
+<meta property="og:site_name" content="JavaScript Monkey">
+<meta property="og:description" content="In the previous post, we created a simple service called deregister to make event listeners deregistration easier. But sometimes you don’t even need to listen to an event more than once, and then the">
+<meta property="og:updated_time" content="2015-10-26T22:28:52.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="One-time events for your scopes!">
+<meta name="twitter:description" content="In the previous post, we created a simple service called deregister to make event listeners deregistration easier. But sometimes you don’t even need to listen to an event more than once, and then the">
+<meta name="twitter:creator" content="@izeau">
+    
+    
+    
+        <meta property="og:image" content="http://www.gravatar.com/avatar/293d986fd9cd0144afeab81e0e29c9af?s=640"/>
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style.min.css" type="text/css">
+    <!--STYLES END-->
+    
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-68688028-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+</head>
+
+    <body>
+        <div id="blog">
+            <header id="header" data-behavior="3">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <h1 class="header-title">
+        <a class="header-title-link" href="/ ">JavaScript Monkey</a>
+    </h1>
+    
+        <a class="header-right-picture" href="/#about">
+            <img class="header-picture" src="http://www.gravatar.com/avatar/293d986fd9cd0144afeab81e0e29c9af?s=90"/>
+        </a>
+    
+</header>
+            <nav id="sidebar" data-behavior="3">
+    
+        <div class="sidebar-profile">
+            <a href="/#about">
+                
+                    <img class="sidebar-profile-picture" src="http://www.gravatar.com/avatar/293d986fd9cd0144afeab81e0e29c9af?s=90"/>
+                
+            </a>
+            <span class="sidebar-profile-name">Jean Dupouy</span>
+        </div>
+    
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/ "
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+                    <span class="sidebar-button-desc">Home</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-categories"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+                    <span class="sidebar-button-desc">Categories</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-tags"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+                    <span class="sidebar-button-desc">Tags</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-archives"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+                    <span class="sidebar-button-desc">Archive</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link " href="https://github.com/izeau" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+                    <span class="sidebar-button-desc">GitHub</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link " href="https://twitter.com/izeau" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-twitter"></i>
+                    <span class="sidebar-button-desc">Twitter</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link " href="https://fr.linkedin.com/in/jeandupouy" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-linkedin"></i>
+                    <span class="sidebar-button-desc">Linked In</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/atom.xml"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+                    <span class="sidebar-button-desc">RSS</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+</nav>
+
+            
+            <div id="main" data-behavior="3"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope itemType="http://schema.org/BlogPosting">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title" itemprop="headline">
+            One-time events for your scopes!
+        </h1>
+    
+    <div class="post-meta">
+    <time itemprop="datePublished" content="Mon Oct 26 2015 21:53:53 GMT+0100">
+	
+		    October 26th 2015
+    	
+    </time>
+    
+</div>
+</div>
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <p>In the <a href="/2015/10/12/elegantly-dispose-of-your-angularjs-listeners/" title="previous post">previous post</a>, we created a simple service called <code>deregister</code> to make event listeners deregistration easier. But sometimes you don’t even need to listen to an event more than once, and then the deregistration task is boring. No more!</p>
+<a id="more"></a>
+<h1 id="Got_the_data?_Move_on,_soldier-">Got the data? Move on, soldier.</h1><p>Sometimes, you just want to listen to an event, but just one time. Your code usually ends up like this:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> (<span class="params">$rootScope</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> dereg = $rootScope.$on(<span class="string">'myEvent'</span>, doStuffOnce);</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">doStuffOnce</span> (<span class="params">event, data</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// deregister the doStuffOnce listener</span></span><br><span class="line">    dereg();</span><br><span class="line"></span><br><span class="line">    doStuff(data);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>This is boring. jQuery’s got <a href="http://api.jquery.com/one/" target="_blank" rel="external"><code>.one</code></a> for this kind of stuff (even jqLite does!). Why didn’t they implement <code>Scope.$one</code>, man I will never now. But thanks to AngularJS 1.4 decorators, we can fix this!</p>
+<h1 id="Enter_Scope-$one">Enter <code>Scope.$one</code></h1><p>Turns out it’s quite easy to implement <code>Scope.$one</code> by decorating the <code>$rootScope</code> service. The <code>Scope</code> class itself isn’t exposed so we can’t alter its prototype, but we can add a hook to the <code>$rootScope.$new</code> method (which is used to create every single scope in the application) to inject our <code>$one</code> method afterwards.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">angular</span><br><span class="line">  .module(<span class="string">'app'</span>)</span><br><span class="line">  .decorator(<span class="string">'$rootScope'</span>, $rootScopeDecorator);</span><br><span class="line"></span><br><span class="line"><span class="comment">/* @ngInject */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">$rootScopeDecorator</span> (<span class="params">$delegate</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// Keep a reference to the original $rootScope.$new method, on the</span></span><br><span class="line">  <span class="comment">// $rootScope object itself for simplicity so we can use this._$new</span></span><br><span class="line">  <span class="comment">// later on.</span></span><br><span class="line">  $delegate._$<span class="keyword">new</span> = $delegate.$<span class="keyword">new</span>;</span><br><span class="line">  $delegate.$<span class="keyword">new</span> = createNewScope;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Now that we have patched $rootScope.$new to make sure every new</span></span><br><span class="line">  <span class="comment">// scope gets the $one method, we need to inject it in the</span></span><br><span class="line">  <span class="comment">// $rootScope itself.</span></span><br><span class="line">  $delegate.$one = one;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> $delegate;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createNewScope</span> (<span class="params">isolate, parent</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// Call the original $rootScope.$new method</span></span><br><span class="line">  <span class="keyword">var</span> newScope = <span class="keyword">this</span>._$<span class="keyword">new</span>(isolate, parent);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Inject Scope.$one</span></span><br><span class="line">  newScope.$one = one;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> newScope;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">one</span> (<span class="params">eventName, callback</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// Scope.$on returns a deregistration function which we assign to</span></span><br><span class="line">  <span class="comment">// the dereg variable...</span></span><br><span class="line">  <span class="keyword">var</span> dereg = <span class="keyword">this</span>.$on(eventName, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">// ... and call as soon as the event is fired.</span></span><br><span class="line">    dereg();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Now we can call the original callback with received arguments</span></span><br><span class="line">    callback.apply(<span class="literal">null</span>, <span class="built_in">arguments</span>);</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// And we also return the deregistration function if for whatever</span></span><br><span class="line">  <span class="comment">// reason we want to stop listening before an event is fired.</span></span><br><span class="line">  <span class="keyword">return</span> dereg;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="Conclusion">Conclusion</h1><p>Now we can update our original use case:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> (<span class="params">$rootScope</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// Yay! We can use the $one method!</span></span><br><span class="line">  $rootScope.$one(<span class="string">'myEvent'</span>, doStuffOnce);</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">doStuffOnce</span> (<span class="params">event, data</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// Listener is already deregistered at this time</span></span><br><span class="line">    doStuff(data);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="Sidenotes">Sidenotes</h1><p>Note that this tip doesn’t exempt you from deregistering manually if the event is never fired. Using <a href="/2015/10/12/elegantly-dispose-of-your-angularjs-listeners/" title="our <code>deregister</code> service">our <code>deregister</code> service</a>, the example looks like this:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> (<span class="params">$rootScope, deregister</span>) </span>&#123;</span><br><span class="line">  $scope.$on(<span class="string">'$destroy'</span>, deregister([</span><br><span class="line">    $rootScope.$one(<span class="string">'myEvent'</span>, doStuffOnce)</span><br><span class="line">  ]));</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">doStuffOnce</span> (<span class="params">event, data</span>) </span>&#123;</span><br><span class="line">    doStuff(data);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+            
+                
+
+            
+        </div>
+    </div>
+    <div class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">TAGGED IN</span><br/>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/angularjs/">AngularJS</a> <a class="tag tag--primary tag--small t-link" href="/tags/performance/">Performance</a>
+
+            </div>
+        
+        <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/10/12/elegantly-dispose-of-your-angularjs-listeners/" data-tooltip="Elegantly dispose of your AngularJS listeners!">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://izeau.github.io/2015/10/26/one-time-events-for-your-scopes/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://izeau.github.io/2015/10/26/one-time-events-for-your-scopes/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://izeau.github.io/2015/10/26/one-time-events-for-your-scopes/">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#top">
+                <i class="fa fa-angle-up"></i>
+            
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+            <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2015 Jean Dupouy. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="3">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/10/12/elegantly-dispose-of-your-angularjs-listeners/" data-tooltip="Elegantly dispose of your AngularJS listeners!">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://izeau.github.io/2015/10/26/one-time-events-for-your-scopes/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://izeau.github.io/2015/10/26/one-time-events-for-your-scopes/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://izeau.github.io/2015/10/26/one-time-events-for-your-scopes/">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+            <li class="post-action">
+                <a class="post-action-btn btn btn--default" href="#disqus_thread">
+                    <i class="fa fa-comment-o"></i>
+                </a>
+            </li>
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#top">
+                <i class="fa fa-angle-up"></i>
+            
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="3">
+    <ul class="share-options">
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://izeau.github.io/2015/10/26/one-time-events-for-your-scopes/">
+                <i class="fa fa-google-plus"></i><span class="">Share on Google Plus</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://izeau.github.io/2015/10/26/one-time-events-for-your-scopes/">
+                <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://izeau.github.io/2015/10/26/one-time-events-for-your-scopes/">
+                <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+            </a>
+        </li>
+    </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+            
+        </div>
+        <div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <img id="about-card-picture" src="http://www.gravatar.com/avatar/293d986fd9cd0144afeab81e0e29c9af?s=110"/>
+        
+            <h4 id="about-card-name">Jean Dupouy</h4>
+        
+            <h5 id="about-card-bio"><p>Full-stack web developer / devops</p>
+</h5>
+        
+        
+            <h5 id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p><a href="https://www.rednet.io">rednet.io</a> co-founder</p>
+
+            </h5>
+        
+        
+            <h5 id="about-card-location">
+                <i class="fa fa-map-marker"></i>
+                <br/>
+                Paris, France
+            </h5>
+        
+    </div>
+</div>
+
+        <div id="cover" style="background-image:url('/assets/images/background.jpg');"></div>
+    </body>
+    <!--SCRIPTS-->
+<script src="/assets/js/script.min.js" type="text/javascript"></script>
+<!--SCRIPTS END-->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'javascriptmonkey';
+        (function() {
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+
+
+
+</html>
